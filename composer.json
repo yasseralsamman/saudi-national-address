@@ -3,7 +3,16 @@
   "description": "Open dataset of Saudi Arabia regions, cities, and districts, with SPL-compatible 11-digit district IDs.",
   "type": "library",
   "license": "MIT",
-  "keywords": ["saudi", "saudi-arabia", "address", "regions", "cities", "districts", "spl", "national-address"],
+  "keywords": [
+    "saudi",
+    "saudi-arabia",
+    "address",
+    "regions",
+    "cities",
+    "districts",
+    "spl",
+    "national-address"
+  ],
   "require": {
     "php": "^8.1",
     "ext-json": "*"
