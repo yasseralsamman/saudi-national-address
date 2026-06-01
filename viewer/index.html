@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: MIT -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Saudi National Address Open Dataset — Map Viewer</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header id="topbar">
+      <div class="brand">Saudi National Address</div>
+      <nav id="breadcrumb" aria-label="Breadcrumb"></nav>
+      <div class="topbar-actions">
+        <div class="dropdown">
+          <button id="download-btn" type="button">Download data ▾</button>
+          <div id="download-menu" class="dropdown-menu" hidden></div>
+        </div>
+        <button id="lang-toggle" type="button" title="Toggle Arabic / English">العربية</button>
+        <a id="github-link" href="https://github.com/yasseralsamman/saudi-national-address" target="_blank" rel="noopener">View on GitHub</a>
+      </div>
+    </header>
+
+    <div id="layout">
+      <aside id="sidebar">
+        <h2 id="list-title">Regions</h2>
+        <ul id="list"></ul>
+
+        <section id="decoder">
+          <h3>Decode a district_id</h3>
+          <input
+            id="decoder-input"
+            type="text"
+            inputmode="numeric"
+            placeholder="e.g. 10100003001"
+            maxlength="11"
+          />
+          <dl id="decoder-output">
+            <div><dt>prefix</dt><dd data-field="prefix">—</dd></div>
+            <div><dt>region_id</dt><dd data-field="region_id">—</dd></div>
+            <div><dt>city_id</dt><dd data-field="city_id">—</dd></div>
+            <div><dt>local_seq</dt><dd data-field="local_seq">—</dd></div>
+          </dl>
+        </section>
+      </aside>
+
+      <main id="map"></main>
+
+      <aside id="detail" hidden>
+        <button id="detail-close" type="button" aria-label="Close">×</button>
+        <h2 id="detail-name">—</h2>
+        <dl>
+          <div><dt>district_id</dt><dd id="detail-id">—</dd></div>
+          <div><dt>local_seq</dt><dd id="detail-seq">—</dd></div>
+          <div><dt>city_id</dt><dd id="detail-city">—</dd></div>
+          <div><dt>region_id</dt><dd id="detail-region">—</dd></div>
+        </dl>
+        <button id="copy-id" type="button">Copy district_id</button>
+      </aside>
+    </div>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="./viewer.js"></script>
+  </body>
+</html>

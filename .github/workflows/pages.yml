@@ -1,0 +1,25 @@
+name: Deploy viewer
+
+on:
+  push: { branches: [main] }
+  workflow_dispatch:
+
+permissions: { contents: read, pages: write, id-token: write }
+
+jobs:
+  deploy:
+    environment: { name: github-pages, url: '${{ steps.deployment.outputs.page_url }}' }
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stage site
+        run: |
+          mkdir _site
+          cp -r viewer/* _site/
+          mkdir -p _site/data
+          cp -r data/dist _site/data/dist
+          cp -r schemas _site/schemas
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: _site }
+      - id: deployment
+        uses: actions/deploy-pages@v4

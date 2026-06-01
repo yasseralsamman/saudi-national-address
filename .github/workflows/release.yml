@@ -1,0 +1,37 @@
+name: Release
+
+on:
+  push:
+    tags: ['v1.0.0']
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions: { contents: write, id-token: write }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: pnpm, registry-url: 'https://registry.npmjs.org' }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run validate
+      - run: pnpm run build
+      - run: pnpm --filter saudi-national-address run build
+      - name: Build SQLite + collect release assets
+        run: |
+          pnpm tsx scripts/lib/sqlite.ts
+          mkdir release-assets
+          cp data/dist/*.{json,geojson,topojson,csv,sql} release-assets/
+          cp data/dist/saudi-national-address.sqlite release-assets/
+          (cd release-assets && zip -r ../saudi-national-address-${{ github.ref_name }}.zip .)
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            saudi-national-address-${{ github.ref_name }}.zip
+            data/dist/saudi-national-address.sqlite
+          generate_release_notes: true
+      - name: Publish to npm
+        run: pnpm --filter saudi-national-address publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,0 +1,44 @@
+{
+  "name": "saudi-national-address",
+  "version": "1.0.0",
+  "description": "Open dataset of Saudi Arabia regions, cities, and districts, with SPL-compatible 11-digit district IDs.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./data/*": "./data/*"
+  },
+  "files": ["dist", "data", "README.md"],
+  "scripts": {
+    "build": "tsup && tsc -p tsconfig.json --emitDeclarationOnly",
+    "test": "vitest run",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": [
+    "saudi",
+    "saudi-arabia",
+    "address",
+    "regions",
+    "cities",
+    "districts",
+    "spl",
+    "national-address"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yasseralsamman/saudi-national-address.git",
+    "directory": "packages/js"
+  },
+  "devDependencies": {
+    "tsup": "^8",
+    "typescript": "^5.5",
+    "vitest": "^2"
+  }
+}

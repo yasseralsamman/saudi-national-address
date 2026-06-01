@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yasseralsamman.github.io/saudi-national-address/schemas/district.schema.json",
+  "title": "Saudi District",
+  "description": "One district of Saudi Arabia. Matches the full and lite district shapes in SNA.md §6.2 (boundaries are present only in the full output).",
+  "type": "object",
+  "required": [
+    "district_id",
+    "city_id",
+    "region_id",
+    "local_seq",
+    "name_ar",
+    "name_en",
+    "center",
+    "bbox"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "district_id": {
+      "type": "integer",
+      "minimum": 10100000000,
+      "maximum": 19999999999,
+      "description": "11-digit SPL composite: prefix(1) + region_id(2) + city_id(5) + local_seq(3). Decoding: region_id = floor(id/1e8)%100, city_id = floor(id/1e3)%100000, local_seq = id%1000."
+    },
+    "city_id": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Parent city identifier."
+    },
+    "region_id": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 13,
+      "description": "Parent region identifier, 1..13."
+    },
+    "local_seq": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999,
+      "description": "Per-city district sequence number (district_id % 1000)."
+    },
+    "name_ar": { "type": "string", "minLength": 1 },
+    "name_en": { "type": "string", "minLength": 1 },
+    "center": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "[latitude, longitude], computed via centroid."
+    },
+    "bbox": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 4,
+      "maxItems": 4,
+      "description": "[minLon, minLat, maxLon, maxLat] (GeoJSON order)."
+    },
+    "boundaries": {
+      "type": "array",
+      "description": "Polygon rings as [lat, lon] pairs (full output only).",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    }
+  }
+}

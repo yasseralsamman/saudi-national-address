@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "types": ["node"],
+    "declarationMap": false,
+    "sourceMap": false,
+    // Data imports are typed by the ambient `*.lite.json` / `*.geojson` shims
+    // in src/data.d.ts, which keeps type-checking fast and avoids deep literal
+    // inference over thousands of records. So JSON resolution is left off here.
+    "resolveJsonModule": false
+  },
+  "include": ["src"]
+}

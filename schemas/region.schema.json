@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yasseralsamman.github.io/saudi-national-address/schemas/region.schema.json",
+  "title": "Saudi Region",
+  "description": "One administrative region of Saudi Arabia. Matches the full and lite region shapes in SNA.md §6.2 (population and boundaries are present only in the full output).",
+  "type": "object",
+  "required": ["region_id", "code", "name_ar", "name_en", "capital_city_id", "center", "bbox"],
+  "additionalProperties": false,
+  "properties": {
+    "region_id": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 13,
+      "description": "Region identifier, 1..13."
+    },
+    "code": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}$",
+      "description": "Two-letter SPL region code (e.g. RD, MQ)."
+    },
+    "name_ar": { "type": "string", "minLength": 1 },
+    "name_en": { "type": "string", "minLength": 1 },
+    "population": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Population (full output only)."
+    },
+    "capital_city_id": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "city_id of the region's capital city."
+    },
+    "center": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "[latitude, longitude], preserved from source."
+    },
+    "bbox": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 4,
+      "maxItems": 4,
+      "description": "[minLon, minLat, maxLon, maxLat] (GeoJSON order)."
+    },
+    "boundaries": {
+      "type": "array",
+      "description": "Polygon rings as [lat, lon] pairs (full output only).",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    }
+  }
+}

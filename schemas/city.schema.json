@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yasseralsamman.github.io/saudi-national-address/schemas/city.schema.json",
+  "title": "Saudi City",
+  "description": "One city of Saudi Arabia. Cities carry no boundary polygons in this dataset, only a center point; the full and lite city outputs are identical.",
+  "type": "object",
+  "required": ["city_id", "region_id", "name_ar", "name_en", "center"],
+  "additionalProperties": false,
+  "properties": {
+    "city_id": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Globally unique city identifier."
+    },
+    "region_id": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 13,
+      "description": "Parent region identifier, 1..13."
+    },
+    "name_ar": { "type": "string", "minLength": 1 },
+    "name_en": { "type": "string", "minLength": 1 },
+    "center": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "[latitude, longitude]."
+    }
+  }
+}

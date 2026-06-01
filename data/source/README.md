@@ -1,0 +1,1 @@
+These three files are the canonical input to all generated artifacts in this repository. Do not edit them to hand-tune output; edit them to correct upstream data and re-run `pnpm run build`. All files in `data/dist/` are generated and overwritten on every build.
