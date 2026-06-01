@@ -1,0 +1,26 @@
+# Normalize line endings.
+* text=auto eol=lf
+
+# Keep the Composer dist archive small: ship only the PHP package (its src +
+# bundled lite data) and the licenses/readme. Everything below is excluded from
+# `composer require` downloads via `git archive` export-ignore.
+/data export-ignore
+/packages/js export-ignore
+/viewer export-ignore
+/scripts export-ignore
+/schemas export-ignore
+/.github export-ignore
+/.editorconfig export-ignore
+/.gitignore export-ignore
+/.nvmrc export-ignore
+/biome.json export-ignore
+/package.json export-ignore
+/pnpm-workspace.yaml export-ignore
+/pnpm-lock.yaml export-ignore
+/tsconfig.base.json export-ignore
+/DATA_REFERENCE.md export-ignore
+/SNA.md export-ignore
+
+# Within the PHP package, dev-only bits aren't needed by consumers.
+/packages/php/tests export-ignore
+/packages/php/phpunit.xml.dist export-ignore
