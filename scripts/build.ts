@@ -31,7 +31,7 @@ import { mysqlSql, postgresSql } from './lib/sql.js';
 import { toTopoJSON } from './lib/topojson.js';
 import { validate } from './validate.js';
 
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 // Deterministic build timestamp = the source snapshot date. Keeping this fixed
 // (rather than `new Date()`) makes the build reproducible so the committed
 // data/dist matches a fresh rebuild in CI (`pnpm run check:dist-clean`).
@@ -160,8 +160,11 @@ function main(): void {
   writeText('postgres.sql', postgresSql(GENERATED_AT, fullRegions, cities, liteDistricts));
 
   // Step 5: copy JSON-family outputs into the packages.
-  // JS gets the full set of json + geojson; PHP gets only the three lite files
-  // (SNA.md §10.4 — Composer download size matters more than JS bundle size).
+  // Both packages bundle lite + full so consumers can choose at runtime:
+  //   - JS: full lives behind the `saudi-national-address/full` subpath.
+  //   - PHP: Dataset::*Full() reads the full files on demand.
+  // GeoJSON is JS-only (the viewer/JS consumers use it). cities have no
+  // full/lite difference, so the PHP package skips the redundant cities.full.
   const jsCopies = [
     'regions.full.json',
     'regions.lite.json',
@@ -175,7 +178,13 @@ function main(): void {
   for (const f of jsCopies) {
     copyFileSync(join(DIST_DIR, f), join(JS_DATA_DIR, f));
   }
-  const phpCopies = ['regions.lite.json', 'cities.lite.json', 'districts.lite.json'];
+  const phpCopies = [
+    'regions.lite.json',
+    'cities.lite.json',
+    'districts.lite.json',
+    'regions.full.json',
+    'districts.full.json',
+  ];
   for (const f of phpCopies) {
     copyFileSync(join(DIST_DIR, f), join(PHP_DATA_DIR, f));
   }

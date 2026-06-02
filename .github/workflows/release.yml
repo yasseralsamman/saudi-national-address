@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    tags: ['v1.0.0']
+    tags: ['v*']
 
 jobs:
   release:
@@ -32,8 +32,9 @@ jobs:
           generate_release_notes: true
       - name: Publish to npm
         run: |
-          if npm view saudi-national-address@1.0.0 version >/dev/null 2>&1; then
-            echo "saudi-national-address@1.0.0 is already published to npm; skipping."
+          VERSION=$(node -p "require('./packages/js/package.json').version")
+          if npm view "saudi-national-address@${VERSION}" version >/dev/null 2>&1; then
+            echo "saudi-national-address@${VERSION} is already published to npm; skipping."
           else
             pnpm --filter saudi-national-address publish --access public --no-git-checks
           fi

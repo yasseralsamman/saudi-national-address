@@ -26,6 +26,30 @@ count(Dataset::districts()); // 3732
 `Region` / `City` / `District` value objects. They are read from the bundled
 `*.lite.json` files on first call and cached in memory.
 
+### Lite vs. full — choose at runtime
+
+The lite accessors above carry ids, names, `center`, and `bbox`. The **full**
+accessors add region `population` and boundary polygons, reading the larger
+`*.full.json` files only when you call them (each is loaded once and cached):
+
+```php
+use SaudiNationalAddress\Dataset;
+
+count(Dataset::regionsFull());   // 13, as RegionFull (adds ->population, ->boundaries)
+count(Dataset::districtsFull()); // 3732, as DistrictFull (adds ->boundaries)
+Dataset::citiesFull();           // same data as cities() — cities have no boundaries
+
+$region = Dataset::findRegionFull(1);
+$region->population;             // int
+$region->boundaries;            // list of [lat, lon] rings
+
+$district = Dataset::findDistrictFull(10100003001);
+$district->boundaries;          // list of [lat, lon] rings
+```
+
+Because the full data is bundled, this package's install size is larger than a
+lite-only build — the trade-off for having both available offline.
+
 ### Look up a record by id
 
 ```php

@@ -16,4 +16,11 @@ export default defineConfig({
       },
     },
   ],
+  test: {
+    // Each test file inlines tens of MB of bundled JSON/GeoJSON. Run files one
+    // at a time in isolated forks so that memory is released between files
+    // instead of several large datasets being held in parallel workers.
+    pool: 'forks',
+    poolOptions: { forks: { minForks: 1, maxForks: 1 } },
+  },
 });

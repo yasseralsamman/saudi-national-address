@@ -56,4 +56,23 @@ final class DatasetTest extends TestCase
             $this->assertSame($district->region_id, $cities[$district->city_id]->region_id);
         }
     }
+
+    public function testFullData(): void
+    {
+        $this->assertCount(13, Dataset::regionsFull());
+        $this->assertCount(4581, Dataset::citiesFull());
+        $this->assertCount(3732, Dataset::districtsFull());
+
+        $region = Dataset::findRegionFull(1);
+        $this->assertNotNull($region);
+        $this->assertSame('RD', $region->code);
+        $this->assertIsInt($region->population);
+        $this->assertNotEmpty($region->boundaries);
+
+        $district = Dataset::findDistrictFull(10100003001);
+        $this->assertNotNull($district);
+        $this->assertSame(3, $district->city_id);
+        $this->assertNotEmpty($district->boundaries);
+        $this->assertGreaterThanOrEqual(4, count($district->boundaries[0]));
+    }
 }

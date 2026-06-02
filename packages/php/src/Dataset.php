@@ -9,10 +9,13 @@ namespace SaudiNationalAddress;
 use RuntimeException;
 
 /**
- * Lazy in-memory loader for the bundled lite dataset.
+ * Lazy in-memory loader for the bundled dataset.
  *
- * The three `*.lite.json` files are read from the package's data directory on
- * first access and cached for the lifetime of the process.
+ * Both lite and full data are bundled; choose at runtime. The lite accessors
+ * (regions/cities/districts) read the small `*.lite.json` files; the full
+ * accessors (regionsFull/districtsFull) read the larger `*.full.json` files
+ * which add region population and boundary polygons. Each file is read from the
+ * package's data directory on first access and cached for the process lifetime.
  */
 final class Dataset
 {
@@ -22,6 +25,10 @@ final class Dataset
     private static ?array $cities = null;
     /** @var array<int,District>|null */
     private static ?array $districts = null;
+    /** @var array<int,RegionFull>|null */
+    private static ?array $regionsFull = null;
+    /** @var array<int,DistrictFull>|null */
+    private static ?array $districtsFull = null;
 
     /** @return array<int,Region> region_id => Region */
     public static function regions(): array
@@ -65,6 +72,45 @@ final class Dataset
         return self::$districts;
     }
 
+    /** @return array<int,RegionFull> region_id => RegionFull (with population + boundaries) */
+    public static function regionsFull(): array
+    {
+        if (self::$regionsFull === null) {
+            self::$regionsFull = [];
+            foreach (self::read('regions.full.json') as $row) {
+                $region = RegionFull::fromArray($row);
+                self::$regionsFull[$region->region_id] = $region;
+            }
+        }
+
+        return self::$regionsFull;
+    }
+
+    /**
+     * Cities have no full/lite difference, so this is the same data as
+     * {@see cities()}.
+     *
+     * @return array<int,City> city_id => City
+     */
+    public static function citiesFull(): array
+    {
+        return self::cities();
+    }
+
+    /** @return array<int,DistrictFull> district_id => DistrictFull (with boundaries) */
+    public static function districtsFull(): array
+    {
+        if (self::$districtsFull === null) {
+            self::$districtsFull = [];
+            foreach (self::read('districts.full.json') as $row) {
+                $district = DistrictFull::fromArray($row);
+                self::$districtsFull[$district->district_id] = $district;
+            }
+        }
+
+        return self::$districtsFull;
+    }
+
     public static function findRegion(int $id): ?Region
     {
         return self::regions()[$id] ?? null;
@@ -78,6 +124,16 @@ final class Dataset
     public static function findDistrict(int $id): ?District
     {
         return self::districts()[$id] ?? null;
+    }
+
+    public static function findRegionFull(int $id): ?RegionFull
+    {
+        return self::regionsFull()[$id] ?? null;
+    }
+
+    public static function findDistrictFull(int $id): ?DistrictFull
+    {
+        return self::districtsFull()[$id] ?? null;
     }
 
     /**

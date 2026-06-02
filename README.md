@@ -61,12 +61,24 @@ JSON Schemas for the three record types are in [`schemas/`](schemas/).
 npm install saudi-national-address
 ```
 
+Lite by default (no geometry — small bundle):
+
 ```ts
 import { districts, findDistrict, decodeDistrictId } from 'saudi-national-address';
 
 console.log(districts.length); // 3732
-findDistrict(10100003001);     // { district_id: 10100003001, city_id: 3, ... }
+findDistrict(10100003001);     // { district_id: 10100003001, city_id: 3, ... }  (no boundaries)
 decodeDistrictId(10100003001); // { prefix: 1, region_id: 1, city_id: 3, local_seq: 1 }
+```
+
+Full data (boundary polygons + region `population`) from the `/full` subpath —
+import it only when you need geometry, so lite-only apps never bundle it:
+
+```ts
+import { districtsFull, regionsFull, findDistrictFull } from 'saudi-national-address/full';
+
+regionsFull[0].population;            // number
+findDistrictFull(10100003001)?.boundaries; // polygon rings ([lat, lon])
 ```
 
 See [`packages/js/README.md`](packages/js/README.md) for the full API.
@@ -77,13 +89,23 @@ See [`packages/js/README.md`](packages/js/README.md) for the full API.
 composer require yasseralsamman/saudi-national-address
 ```
 
+Lite by default:
+
 ```php
 use SaudiNationalAddress\Dataset;
 use SaudiNationalAddress\DistrictId;
 
 count(Dataset::districts());            // 3732
-Dataset::findDistrict(10100003001);     // District { city_id: 3, ... }
+Dataset::findDistrict(10100003001);     // District { city_id: 3, ... }  (no boundaries)
 DistrictId::decode(10100003001);        // ['prefix' => 1, 'region_id' => 1, 'city_id' => 3, 'local_seq' => 1]
+```
+
+Full data (boundary polygons + region `population`), loaded on demand:
+
+```php
+Dataset::findRegionFull(1)->population;           // int
+Dataset::findDistrictFull(10100003001)->boundaries; // polygon rings ([lat, lon])
+count(Dataset::districtsFull());                  // 3732, each with boundaries
 ```
 
 See [`packages/php/README.md`](packages/php/README.md) for the full API.

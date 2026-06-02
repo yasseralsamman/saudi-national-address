@@ -27,6 +27,36 @@ districts.length; // 3732
 The named exports use the **lite** records (no boundary polygons). The full GeoJSON
 FeatureCollections are available as `regionsGeoJSON` and `districtsGeoJSON`.
 
+### Lite vs. full — choose at import time
+
+The default entry is **lite** (ids, names, `center`, `bbox`). The **full** records
+(adding boundary polygons and region `population`) live behind a separate subpath,
+so an app that only needs lite never bundles the ~31 MB of geometry:
+
+```ts
+// lite (default)
+import { regions, districts, findDistrict } from 'saudi-national-address';
+
+// full — only pulled in if you import it
+import {
+  regionsFull,      // RegionFull[]  — adds population + boundaries
+  citiesFull,       // City[]         — identical to lite `cities`
+  districtsFull,    // DistrictFull[] — adds boundaries
+  findRegionFull,
+  findCityFull,
+  findDistrictFull,
+} from 'saudi-national-address/full';
+
+regionsFull[0].population;                    // number | null
+findDistrictFull(10100003001)?.boundaries;    // number[][][] of [lat, lon] rings
+```
+
+For map rendering you can also use the bundled GeoJSON (`[lon, lat]`, closed rings):
+
+```ts
+import { districtsGeoJSON } from 'saudi-national-address';
+```
+
 ### Look up a district by id
 
 ```ts

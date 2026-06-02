@@ -46,6 +46,20 @@ export interface District {
   bbox: LonLatBbox;
 }
 
+/** A region with population and boundary polygons (full shape). */
+export interface RegionFull extends Region {
+  /** Population, or null if unknown upstream. */
+  population: number | null;
+  /** Polygon rings as [lat, lon] pairs (source order). */
+  boundaries: number[][][];
+}
+
+/** A district with boundary polygons (full shape). */
+export interface DistrictFull extends District {
+  /** Polygon rings as [lat, lon] pairs (source order). */
+  boundaries: number[][][];
+}
+
 /** The decoded parts of an 11-digit composite district_id. */
 export interface DistrictIdParts {
   prefix: 1;

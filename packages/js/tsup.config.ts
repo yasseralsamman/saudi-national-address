@@ -2,7 +2,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: ['src/index.ts', 'src/full.ts'],
   format: ['esm', 'cjs'],
   // Declarations are emitted by `tsc` (see the package build script): the dts
   // rollup cannot process the ambient `declare module '*.glob'` data shims.
