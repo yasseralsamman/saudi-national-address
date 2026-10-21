@@ -6,17 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignore": [
-      "data/source/**",
-      "data/dist/**",
-      "packages/*/data/**",
-      "packages/*/dist/**",
-      "**/vendor/**",
-      "**/node_modules/**",
-      "_site/**",
-      "release-assets/**"
-    ]
-  },
+      },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
